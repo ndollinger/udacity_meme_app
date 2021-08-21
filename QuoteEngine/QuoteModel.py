@@ -1,13 +1,16 @@
+"""Module containing QuoteModel class."""
+
+
 class QuoteModel():
     """Quote that consists of a quote body string and an author string.
 
     Attributes:
         body - the quote itself
         author - the name of the quote's author
-    """   
-    
+    """
+
     body = ''
-    author  = ''
+    author = ''
 
     def __init__(self, name: str, body: str):
         """Initialize a Quote, check inputs.
