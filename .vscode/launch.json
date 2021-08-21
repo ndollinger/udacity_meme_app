@@ -10,6 +10,13 @@
             "request": "launch",
             "program": "test_ingestors.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: test_meme_engine",
+            "type": "python",
+            "request": "launch",
+            "program": "test_meme_engine.py",
+            "console": "integratedTerminal"
         }
     ]
 }
