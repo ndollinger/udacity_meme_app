@@ -12,14 +12,14 @@ class QuoteModel():
     body = ''
     author = ''
 
-    def __init__(self, name: str, body: str):
+    def __init__(self, body: str, name: str):
         """Initialize a Quote, check inputs.
 
         replaces an empty name with "unknown"
         """
-        self.name = name
+        self.author = name
         if not name:
-            name = "unknown"
+            self.author = "unknown"
         self.body = body
 
     def __str__(self):

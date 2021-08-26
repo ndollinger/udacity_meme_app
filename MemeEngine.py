@@ -50,8 +50,8 @@ class MemeEngine:
             # resize to a max width "width" and proportional to height
             if im.width > width:
                 (im_width, im_height) = im.size
-                image_proportion = im_height//im_width
-                im = im.resize((width, width*image_proportion))
+                image_proportion = im_height/im_width
+                im = im.resize((width, int(width*image_proportion)))
 
             # Add Quote to the image 
             # TODO: where should this be drawn?
