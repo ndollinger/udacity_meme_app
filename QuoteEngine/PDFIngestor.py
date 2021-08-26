@@ -34,17 +34,15 @@ class PDFIngestor(IngestorInterface):
             raise Exception('cannot ingest File Type')
 
         tmp = f'./tmp_{random.randint(0,100000000)}.txt'
-        call = subprocess.call(['pdftotext', path, tmp])
-        file_ref = open(tmp, "r")
+        subprocess.run(['pdftotext', '-layout', path, tmp])
         quotes = []
 
-        for line in file_ref.readlines():
-            line = line.strip('\n\r').strip()
-            if len(line) > 0:
-                parse = line.split(' - ')
-                new_quote = QuoteModel(parse[0], parse[1])
-                quotes.append(new_quote)
+        with open(tmp, "r") as fp:
+            for line in fp:
+                if line.strip() != '':
+                    parse = line.split(' - ')
+                    new_quote = QuoteModel(parse[0], parse[1])
+                    quotes.append(new_quote)
 
-        file_ref.close()
         os.remove(tmp)
         return quotes
