@@ -66,32 +66,33 @@ def meme_form():
 @app.route('/create', methods=['POST'])
 def meme_post():
     """Create a user defined meme."""
-
     # 1. Use requests to save the image from the image_url
     #    form param to a temp local file.
     img_url = request.form['image_url']
     temp_image = "temp_" + img_url.split('/')[-1]
-    response = requests.get(img_url)
+    try:
+        response = requests.get(img_url)
+    except Exception as e:
+        app.logger.error(f'Error while fetching {img_url}: {str(e)}') 
+        return render_template('meme_generator_error.html')
+
     try:
         i = Image.open(BytesIO(response.content))
     except UnidentifiedImageError as uie:
         app.logger.error(f'UnidentifedImage Error when opening {img_url}: {str(uie)}')
-        # TODO: need to raise some kind of warning to user here
         return render_template('meme_generator_error.html')
-
     
     try:
         i.save(temp_image)
     except Exception as e:
-        app.logger.error(f'Failed to save temp {image_name}: {str(e)}')
-        # TODO: need to raise some kind of warning to user here
+        app.logger.error(f'Failed to save temp {temp_image}: {str(e)}')
         return render_template('meme_generator_error.html')
 
 
     # 2. Use the meme object to generate a meme using this temp
     #    file and the body and author form paramaters.
-    body = request.form['body'] or None
-    author = request.form['author'] or None
+    body = request.form['body'] or "You forgot a quote"
+    author = request.form['author'] or "You Forgot an Author"
     path = meme.make_meme(temp_image, body, author)
 
     # 3. Remove the temporary saved image.
