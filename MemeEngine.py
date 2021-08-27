@@ -41,7 +41,7 @@ class MemeEngine:
                 Thrown if the image to be used to create the meme isn't foudnd
 
         """
-        tmp_image = ''
+        tmp_image_path = ''
 
         # Load the image
         with open(img_path, "rb") as img_reader:
@@ -53,17 +53,51 @@ class MemeEngine:
                 image_proportion = im_height/im_width
                 im = im.resize((width, int(width*image_proportion)))
 
-            # Add Quote to the image 
-            # TODO: where should this be drawn?
-            # TODO: Modify the color of the text to make more readable?
-            draw = ImageDraw.Draw(im)
-            font = ImageFont.truetype(
-                "./_data/fonts/Laffayette_Comic_Pro.ttf", 25)
-            draw.text((10, 10), f'{text} - {author}',
-                      fill=(255, 255, 255, 255), font=font)
+            # Add Quote to the image (TODO: Check calling conventions here)
+            self.__draw_quote_on_img(im, text, author)
+ 
             # save the image
-            tmp_image = f'{self.temp_dir}/tmp_{random.randint(0,100000000)}.jpg'
-            im.save(tmp_image)
+            tmp_image_path = f'{self.temp_dir}/tmp_{random.randint(0,100000000)}.jpg'
+            im.save(tmp_image_path)
 
         # return the path to the image
-        return tmp_image
+        return tmp_image_path
+
+    def __draw_quote_on_img(self, image, text, author):
+        """Draw given quote on an image.
+
+        Draw give quote and author name on pass PIL.Image
+        resize the text as necessary to fit on the image
+
+        Parameters:
+            image:
+                PIL.Image to draw text on
+            text:
+                Body of the quote
+            author:
+                Author of the quote
+
+        Returns:
+            Nothing
+
+        Raises:
+            TBD
+        """
+        quote_str = f'{text} - {author}'
+        # TODO: where should this be drawn?
+        # TODO: Modify the color of the text to make more readable?
+        draw = ImageDraw.Draw(image)
+        
+        # Make the font size fit the image
+        # No greater than 25 point though
+        font_size = 25
+        text_height, text_width = image.height, image.width
+        while (text_width >= image.width or text_height >= image.height) and font_size > 1:
+            font = ImageFont.truetype(
+                "./_data/fonts/Laffayette_Comic_Pro.ttf", font_size)
+            (text_width, text_height) = font.getsize(quote_str)
+            font_size -= 1 
+
+        draw.text((10, 10), quote_str,
+                      fill=(255, 255, 255, 255), 
+                      font=font)
