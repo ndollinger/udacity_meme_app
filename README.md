@@ -68,6 +68,27 @@ This is the module that actually creates the memes by marrying the Quotes from t
 
 Provides a command line interface that allows users to pass paths to quotes and images which are used to create a meme.  
 
+To run the utility from the command line and see the latest documentation:
+
+```bash
+python3 meme.py --help
+```
+
 ### Flask application
 
 The Flask Application is contained in `app.py`.  Running this flask application creates a web interface for viewing random memes and allowing users to create their own memes.
+
+To run the Flask app from the command line, Flask must be installed:
+
+```bash
+pip install Flask
+```
+
+Then run
+
+```bash
+export FLASK_APP=app
+flask run
+```
+
+For more details, see the [Flask Documentation](https://flask.palletsprojects.com/en/2.0.x/#user-s-guide)
